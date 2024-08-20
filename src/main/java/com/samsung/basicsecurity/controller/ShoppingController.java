@@ -179,7 +179,7 @@ public class ShoppingController {
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
 
-        session.removeAttribute(SHOPPING_CART_SESSION);
+        session.setAttribute(SHOPPING_CART_SESSION, gson.toJson(cart));
 
         return "redirect:/home";
     }
