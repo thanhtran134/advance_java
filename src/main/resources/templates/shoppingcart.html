@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Cart</title>
+    <link th:href="@{/styles.css}" rel="stylesheet">
+    <script th:inline="javascript">
+        /* Kiểm tra xem có thông báo nào được đặt trong model hay không */
+        [[${message} != null ? 'alert("' + ${message} + '");' : '']]
+    </script>
+</head>
+<body>
+<div class="header">
+    <div class="nav">
+        <a th:href="@{/home}"><button>All</button></a>
+        <a th:href="@{/home(catalogId=1)}"><button>Catalog 1</button></a>
+        <a th:href="@{/home(catalogId=2)}"><button>Catalog 2</button></a>
+        <form th:action="@{/home}" method="get">
+            <input type="text" name="keyword" placeholder="Enter product name..." required>
+            <button type="submit">Search</button>
+        </form>
+        <form th:action="@{/checkout}" method="POST">
+            <button type="submit">Checkout</button>
+        </form>
+    </div>
+</div>
+
+<div class="shopping-cart">
+    <h2>Your Shopping Cart (<span th:text="${cart.items.size()}"></span> items)</h2>
+    <div class="cart-items">
+        <div class="cart-item" th:each="item : ${cart.items}">
+            <div class="product-picture">
+                <img th:src="@{${item.product.getPicture()}}" alt="Product Picture">
+            </div>
+            <div class="product-details">
+                <div class="unit-price">Unit Price: <span th:text="${item.product.price}"></span> VND</div>
+                <div class="quantity-control">
+                    <!-- Form for decreasing quantity -->
+                    <form th:action="@{/shopping/decrease}" method="post" style="display:inline;">
+                        <input type="hidden" th:value="${item.product.getId()}" name="productId">
+                        <button type="submit">-</button>
+                    </form>
+
+                    <input type="text" th:value="${item.qty}" readonly>
+
+                    <!-- Form for increasing quantity -->
+                    <form th:action="@{/shopping/increase}" method="post" style="display:inline;">
+                        <input type="hidden" th:value="${item.product.getId()}" name="productId">
+                        <button type="submit">+</button>
+                    </form>
+                </div>
+            </div>
+            <form th:action="@{/shopping/remove}" method="post">
+                <input type="hidden" th:value="${item.product.getId()}" name="productId">
+                <button type="submit" class="remove-item">Remove</button>
+            </form>
+        </div>
+        <div class="total-price">Total: <span th:text="${cart.getTotalPrice()}"></span> VND</div>
+    </div>
+</div>
+</body>
+</html>

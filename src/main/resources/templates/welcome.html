@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Catalog</title>
+    <link th:href="@{/styles.css}" rel="stylesheet">
+</head>
+<body>
+<div class="header">
+    <div class="nav">
+        <a th:href="@{/home}"><button>All</button></a>
+        <a th:href="@{/home(catalogId=1)}"><button>Catalog 1</button></a>
+        <a th:href="@{/home(catalogId=2)}"><button>Catalog 2</button></a>
+        <form th:action="@{/home}" method="get">
+            <input type="text" name="keyword" placeholder="Enter product name..." required>
+            <button type="submit">Search</button>
+        </form>
+        <form th:action="@{/checkout}" method="post">
+            <button type="submit">Checkout</button>
+        </form>
+    </div>
+</div>
+
+
+<a href="/shopping/view"> CHECK CART </a>
+
+<div class="catalog">
+    <h2>Selected Catalog (<span th:text="${products.size()}"></span> items)</h2>
+    <div class="products">
+        <div class="product-card" th:each="product : ${products}">
+            <div class="product-picture">
+                <img th:src="@{${product.getPicture()}}" alt="Product Picture">
+            </div>
+            <div class="product-name" th:text="${product.name}">Product Name</div>
+            <div class="product-price">Giá: <span th:text="${product.price}">0</span> VND</div>
+            <form th:action="@{/shopping/addtocart}" method="post">
+                <input type="hidden" th:value="${product.getId()}" name="productId" id="productId">
+                <button type="submit">Buy</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
